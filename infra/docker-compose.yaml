@@ -1,0 +1,13 @@
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: infra/Dockerfile
+    volumes:
+      - ../src:/app/src
+      - ../config:/app/config:ro
+    environment:
+      - CONFIG_PATH=${CONFIG_PATH:-/app/config/config.toml}
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
