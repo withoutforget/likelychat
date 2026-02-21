@@ -1,5 +1,6 @@
-from dataclasses import dataclass
 import tomllib
+from dataclasses import dataclass
+from pathlib import Path
 
 from adaptix import Retort
 
@@ -16,6 +17,6 @@ class Config:
 
 
 def get_config_from(path: str) -> Config:
-    with open(path, "rb") as file:
+    with Path.open(path, "rb") as file:
         raw_config = tomllib.load(file)
         return Retort().load(raw_config, Config)
