@@ -1,0 +1,14 @@
+[project]
+name = "likelychat"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "adaptix>=3.0.0b11",
+    "dishka>=1.8.0",
+    "fastapi>=0.129.2",
+    "ruff>=0.15.2",
+    "structlog>=25.5.0",
+    "uvicorn>=0.41.0",
+]
