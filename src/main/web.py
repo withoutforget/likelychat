@@ -1,12 +1,17 @@
+from dishka.integrations.fastapi import setup_dishka
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from src.config import Config
+from src.main.di import get_async_container
 from src.presentation.setup import setup_app
 
 
 def setup_fastapi(config: Config) -> FastAPI:
     app = FastAPI()
+
+    container = get_async_container(config)
+    setup_dishka(container=container, app=app)
 
     cors = config.cors
 

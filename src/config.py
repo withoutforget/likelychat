@@ -20,9 +20,17 @@ class CORSConfig:
 
 
 @dataclass(slots=True)
+class AuthServiceConfig:
+    secret_key: str
+    algorithm: str
+    token_timeout: int
+
+
+@dataclass(slots=True)
 class Config:
     logger: LoggerConfig
     cors: CORSConfig
+    auth: AuthServiceConfig
 
 
 def get_config_from(path: str) -> Config:
