@@ -12,8 +12,17 @@ class LoggerConfig:
 
 
 @dataclass(slots=True)
+class CORSConfig:
+    allow_origins: list[str]
+    allow_credentials: bool
+    allow_methods: list[str]
+    allow_headers: list[str]
+
+
+@dataclass(slots=True)
 class Config:
     logger: LoggerConfig
+    cors: CORSConfig
 
 
 def get_config_from(path: str) -> Config:
