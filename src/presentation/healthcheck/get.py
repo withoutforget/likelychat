@@ -5,7 +5,6 @@ from fastapi import APIRouter
 
 from src.application.auth.auth_service import UserAuthModel
 
-
 ROUTER = APIRouter(prefix="/healthcheck", route_class=DishkaRoute)
 
 
@@ -16,5 +15,7 @@ class GetServiceStatusResponse:
 
 
 @ROUTER.get("/")
-async def get_service_status(user: FromDishka[UserAuthModel]) -> GetServiceStatusResponse:
+async def get_service_status(
+    user: FromDishka[UserAuthModel],
+) -> GetServiceStatusResponse:
     return GetServiceStatusResponse(ok=True)
