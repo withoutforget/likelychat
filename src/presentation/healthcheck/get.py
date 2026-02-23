@@ -14,8 +14,11 @@ class GetServiceStatusResponse:
     message: str | None = field(default=None)
 
 
-@ROUTER.get("/")
+
+@ROUTER.get("/",
+            description= "Returns true and message with null when the server is running")
 async def get_service_status(
     user: FromDishka[UserAuthModel],
 ) -> GetServiceStatusResponse:
+
     return GetServiceStatusResponse(ok=True)
