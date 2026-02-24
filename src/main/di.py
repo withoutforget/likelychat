@@ -9,6 +9,7 @@ from fastapi import Request
 
 from src.application.auth.di import AuthServiceProvider
 from src.config import Config
+from src.infra.postgres.di import PostgresProvider
 
 
 class GlobalProvider(Provider):
@@ -18,5 +19,8 @@ class GlobalProvider(Provider):
 def get_async_container(config: Config) -> AsyncContainer:
 
     return make_async_container(
-        GlobalProvider(), AuthServiceProvider(), context={Config: config}
+        GlobalProvider(),
+        AuthServiceProvider(),
+        PostgresProvider(),
+        context={Config: config},
     )

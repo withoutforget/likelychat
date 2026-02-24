@@ -27,10 +27,24 @@ class AuthServiceConfig:
 
 
 @dataclass(slots=True)
+class PostgresConfig:
+    host: str
+    port: int
+    database: str
+    user: str
+    password: str
+
+    @property
+    def dsn(self) -> str:
+        return f"postgresql://{self.user}:{self.password}@{self.host}:{self.port}/{self.database}"
+
+
+@dataclass(slots=True)
 class Config:
     logger: LoggerConfig
     cors: CORSConfig
     auth: AuthServiceConfig
+    postgres: PostgresConfig
 
 
 def get_config_from(path: str) -> Config:
