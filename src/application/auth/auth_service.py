@@ -24,7 +24,7 @@ class AuthServiceConfig:
 class AuthService:
     config: AuthServiceConfig
 
-    def create_token(self, idx: int, username: str) -> str:
+    def create_token(self, idx: uuid.UUID, username: str) -> str:
         payload = {
             "exp": int(datetime.datetime.now(tz=datetime.UTC).timestamp())
             + self.config.token_timeout,
