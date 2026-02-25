@@ -41,11 +41,18 @@ class AuthService:
 
     def validate(self, token: str) -> UserAuthModel:
         try:
-            return jwt.decode(
+            tmp_decode_data = jwt.decode(
                 token,
                 self.config.secret_key,
                 algorithms=[self.config.algorithm],
             )
+
+            return UserAuthModel(
+                id= tmp_decode_data["sub"],
+                username= tmp_decode_data["username"],
+                expires_at= tmp_decode_data["exp"]
+            )
+        
         except jwt.ExpiredSignatureError as err:
             raise HTTPException(
                 status_code=401, detail={"message": "token expired"}
