@@ -28,7 +28,7 @@ async def register(
 ) -> RegisterResponse:
         if await rep.exists(payload.username):
             raise HTTPException(
-                status_code= 400,
+                status_code= 409,
                 detail= "user with that username alredy exist")
         else:
             await rep.create(payload.username, payload.password)
