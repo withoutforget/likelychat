@@ -1,4 +1,7 @@
+salt = b'$2b$12$LQv3c1yqBWVHxkd0LHAkCO'
+
 from dataclasses import dataclass, field
+import bcrypt
 
 from dishka.integrations.fastapi import DishkaRoute, FromDishka
 from fastapi import APIRouter, HTTPException, status
@@ -31,7 +34,7 @@ async def register(
                 status_code= 409,
                 detail= "user with that username alredy exist")
         else:
-            await rep.create(payload.username, payload.password)
+            await rep.create(payload.username, bcrypt.hashpw(payload.password.encode("utf-8"), salt) )
             user = await rep.get_by_username(payload.username)
             user_id = user.id
             token = service.create_token(user_id, payload.username)
