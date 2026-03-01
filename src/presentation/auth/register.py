@@ -34,9 +34,8 @@ async def register(
                 status_code= 409,
                 detail= "user with that username alredy exist")
         else:
-            await rep.create(payload.username, bcrypt.hashpw(payload.password.encode("utf-8"), salt) )
+            await rep.create(payload.username, bcrypt.hashpw(payload.password.encode("utf-8"), salt).decode("utf-8") )
             user = await rep.get_by_username(payload.username)
             user_id = user.id
             token = service.create_token(user_id, payload.username)
             return RegisterResponse(token=token)
-            
