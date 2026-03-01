@@ -1,26 +1,45 @@
 from dataclasses import dataclass, field
+import bcrypt
 
 from dishka.integrations.fastapi import DishkaRoute, FromDishka
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException, status
+from pydantic import BaseModel
 
 from src.application.auth.auth_service import AuthService
+from src.infra.postgres.repo.user.repository import UserRepository
+
 
 ROUTER = APIRouter(prefix="/login", route_class=DishkaRoute)
 
 
-@dataclass(slots=True)
-class LoginRequest:
+class LoginRequest(BaseModel):
     username: str
     password: str
 
 
-@dataclass(slots=True)
-class LoginResponse:
+
+class LoginResponse(BaseModel):
     token: str | None = field(default=None)
 
 
 @ROUTER.post("/")
 async def login(
-    payload: LoginRequest, service: FromDishka[AuthService]
+    payload: LoginRequest, 
+    service: FromDishka[AuthService],
+    rep: FromDishka[UserRepository]
 ) -> LoginResponse:
-    pass
+    if await rep.exists(payload.username):
+        user = await rep.get_by_username(payload.username)
+        if bcrypt.checkpw(payload.password.encode('utf-8'), user.password.encode('utf-8')):
+            token = service.create_token(user.id, user.username)
+            return LoginResponse(token=token)
+        else:
+            raise HTTPException(
+            status_code= 401,
+            detail= "invalid username or password"
+        )
+    else:
+        raise HTTPException(
+            status_code= 401,
+            detail= "invalid username or password"
+        )
